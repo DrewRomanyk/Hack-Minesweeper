@@ -123,7 +123,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     static JFrame frame;
     
     //
-    private static boolean settingsShown = false;
+    private static boolean sizeShown = false;
+    private static boolean probabilityShown = false;
     private static boolean playAgain = false;
     private static boolean isFlagged = false;
     private static JCheckBox flagged;
@@ -221,20 +222,25 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         //save
         JMenuItem menuItem1 = new JMenuItem(" Save...   ");
         menuItem1.addActionListener(std);
-        menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-                                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        //menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+                                //Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menuItem1.setActionCommand("save");
         menu.add(menuItem1);
         //play again
         JMenuItem playAgain = new JMenuItem("Play Again?");
         playAgain.addActionListener(std);
-        menuBar.add(playAgain);
         playAgain.setActionCommand("playAgain");
+        menuBar.add(playAgain);
         //settings
-        JMenuItem settings = new JMenuItem("Settings");
-        settings.addActionListener(std);
-        menuBar.add(settings);
-        playAgain.setActionCommand("settings");
+        JMenuItem size = new JMenuItem("Change Board Size");
+        size.addActionListener(std);
+        size.setActionCommand("size");
+        menuBar.add(size);
+      //settings
+        JMenuItem probability = new JMenuItem("Change Probability");
+        probability.addActionListener(std);
+        probability.setActionCommand("prob");
+        menuBar.add(probability);
         //flagged
         flagged = new JCheckBox("Flag Mode");
         flagged.setSelected(false);
@@ -936,13 +942,29 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
             if (filename != null) {
                 StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
             }
-            System.out.println("FEE");
     	} else if ("playAgain".equals(e.getActionCommand())) {
     		playAgain = true;
-    		System.out.println("MOO!");
-    	} else if ("settings".equals(e.getActionCommand())) {
-    		settingsShown = true;
+    	} else if ("size".equals(e.getActionCommand())) {
+    		sizeShown = true;
+    	} else if ("prob".equals(e.getActionCommand())) {
+    		probabilityShown = true;
     	}
+    }
+    
+    public static boolean isProbabilityShown() {
+    	return probabilityShown;
+    }
+    
+    public static void probabilityDone() {
+    	probabilityShown = false;
+    }
+    
+    public static boolean isSizeShown() {
+    	return sizeShown;
+    }
+    
+    public static void sizeDone() {
+    	sizeShown = false;
     }
     
     public static boolean getPlayAgainValue() {

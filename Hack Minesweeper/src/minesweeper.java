@@ -6,10 +6,10 @@ public class minesweeper {
 	public final static int DEFEAT = 1;
 	public final static int VICTORY = 2;
 	public final static double cellSize = 45;
-	//MIN is 4; MAX is 11
+	//MIN is 6; MAX is 11
 	public static int MAX_ROWS = 9;
 	public static int MAX_COLUMNS = 9;	
-	public static double PROBABILITY = .9;
+	public static double PROBABILITY = .1;
 	
 	public static boolean playAgain = true;
 	
@@ -18,7 +18,7 @@ public class minesweeper {
 		runGame();
 		while(playAgain) {
 			playAgain = false;
-			willrestartGame();
+			checkButtons();
 		}
 	}
 	
@@ -29,8 +29,8 @@ public class minesweeper {
 		minesweeperBoard.drawBoard();
 		
 		while(gameStatus == PLAYING) {
-			//end game to new game
-			willrestartGame();
+			//can end game to new game
+			checkButtons();
 			//mouse button pressed
 			if(StdDraw.mouseReleased()) {
 				//System.out.println("Mouse X: " + StdDraw.mouseX() + " Mouse Y: " + StdDraw.mouseY());
@@ -54,10 +54,61 @@ public class minesweeper {
 		playAgain = true;
 	}
 	
-	public static void willrestartGame() {
+	public static void checkButtons() {
 		if(StdDraw.getPlayAgainValue()) {
 			StdDraw.gameRestarting();
 			runGame();
+		} else if(StdDraw.isSizeShown()) {
+			StdDraw.sizeDone();
+			sizeUpdated();
+		} else if(StdDraw.isProbabilityShown()) {
+			StdDraw.probabilityDone();
+			probabilityUpdated();
 		}
+	}
+	
+	public static void sizeUpdated() {
+		Object[] possibilities = {"6x6", "7x7","8x8","9x9","10x10","11x11"};
+		String s = (String)JOptionPane.showInputDialog(
+		                    StdDraw.frame,
+		                    "Pick which board you want:",
+		                    "Customize size of board",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    possibilities,
+		                    "9x9");
+
+		//If a string was returned, say so.
+		int numForRC = 9;
+		if ((s != null) && (s.length() > 0)) {
+			int breakPoint = s.indexOf("x");
+		    System.out.println(s.substring(0,breakPoint));
+		    numForRC = Integer.parseInt(s.substring(0,breakPoint));
+		}
+		MAX_COLUMNS = numForRC;
+		MAX_ROWS = numForRC;
+		runGame();
+	}
+	
+	public static void probabilityUpdated() {
+		Object[] possibilities = {"10%", "20%","30%","40%","50%","60%", "70%","80%","90%"};
+		String s = (String)JOptionPane.showInputDialog(
+		                    StdDraw.frame,
+		                    "Pick which board you want:",
+		                    "Customize probability of bombs",
+		                    JOptionPane.PLAIN_MESSAGE,
+		                    null,
+		                    possibilities,
+		                    "10%");
+
+		//If a string was returned, say so.
+		double numForProb = .1;
+		if ((s != null) && (s.length() > 0)) {
+			int breakPoint = s.indexOf("%");
+		    System.out.println(s.substring(0,breakPoint));
+		    numForProb = Double.parseDouble(s.substring(0,breakPoint)) / 100;
+		}
+		PROBABILITY = numForProb;
+		runGame();
 	}
 }
