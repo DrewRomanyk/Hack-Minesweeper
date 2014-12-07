@@ -35,13 +35,6 @@ public class Board {
 		}
 		cellsInGame = rows * columns;
 
-		//Set neighbor
-		for(int r = 0; r < rows; r++) {
-			for(int c = 0; c < columns; c++) {
-				setNeighborValue(cell[r][c]);
-			}
-		}
-
 	}
 
 	public void setNeighborValue(Cell tgtCell) {
@@ -149,7 +142,17 @@ public class Board {
 	}
 
 	public void revealCell(Cell tgtCell) {
-		if((!tgtCell.isBomb() && !tgtCell.isRevealed() && !tgtCell.isFlagged() && !firstPlay) || (tgtCell.isBomb() && firstPlay)) {
+		if((!tgtCell.isBomb() && !tgtCell.isRevealed() && !tgtCell.isFlagged() && !firstPlay) || (firstPlay)) {
+			if(firstPlay) {
+				firstPlay = false;
+				tgtCell.setValue(0);
+				//Set neighbor
+				for(int r = 0; r < rows; r++) {
+					for(int c = 0; c < columns; c++) {
+						setNeighborValue(cell[r][c]);
+					}
+				}
+			}
 			updateRevealedCell(tgtCell);
 			revealedCells++;
 

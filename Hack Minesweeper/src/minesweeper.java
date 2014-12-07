@@ -9,7 +9,7 @@ public class minesweeper {
 	//MIN is 4; MAX is 11
 	public static int MAX_ROWS = 9;
 	public static int MAX_COLUMNS = 9;	
-	public static double PROBABILITY = .1;
+	public static double PROBABILITY = .9;
 	
 	public static boolean playAgain = true;
 	
