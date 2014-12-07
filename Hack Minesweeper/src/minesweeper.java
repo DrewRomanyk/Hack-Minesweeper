@@ -6,7 +6,7 @@ public class minesweeper {
 	public final static int DEFEAT = 1;
 	public final static int VICTORY = 2;
 	public final static double cellSize = 45;
-	//MIN is 6; MAX is 11
+	//MIN is 6; MAX is 11; Need to optimize the creation of the cells and their placement for more
 	public static int MAX_ROWS = 9;
 	public static int MAX_COLUMNS = 9;	
 	public static double PROBABILITY = .1;

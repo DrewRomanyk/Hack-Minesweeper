@@ -64,7 +64,9 @@ public class Board {
 	public String getCellValue(int r, int c) {
 		if(cell[r][c].isBomb()) {
 			return " * ";
-		} else {
+		} else if (cell[r][c].getValue() == 0){ 
+			return "   ";
+		}else {
 			return " " + cell[r][c].getValue() + " ";
 		}
 	}
