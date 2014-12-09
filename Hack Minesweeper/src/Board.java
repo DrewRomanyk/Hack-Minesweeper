@@ -1,8 +1,12 @@
+import java.awt.Color;
+
 
 public class Board {
 	public final static int PLAYING = 0;
 	public final static int DEFEAT = 1;
 	public final static int VICTORY = 2;
+	
+	public final static Color burntOrange = new Color(191,87,0);
 
 	public final static double cellSize = 45;
 
@@ -116,8 +120,8 @@ public class Board {
 	}
 
 	public boolean isClickedCell(double mouseX, double mouseY, Cell tgtCell) {
-		return ((mouseX >= (tgtCell.getPosX() - (cellSize / 1000))) && (mouseX <= (tgtCell.getPosX() + (cellSize / 1000))) &&
-				(mouseY >= (tgtCell.getPosY() - (cellSize / 1000))) && (mouseY <= (tgtCell.getPosY() + (cellSize / 1000))));
+		return ((mouseX >= (tgtCell.getPosX() - (tgtCell.getCellSize()))) && (mouseX <= (tgtCell.getPosX() + (tgtCell.getCellSize()))) &&
+				(mouseY >= (tgtCell.getPosY() - (tgtCell.getCellSize()))) && (mouseY <= (tgtCell.getPosY() + (tgtCell.getCellSize()))));
 	}
 	
 	public void flagCell(Cell tgtCell) {
@@ -129,8 +133,8 @@ public class Board {
 				}
 				tgtCell.setFlagged(false);
 				
-				StdDraw.setPenColor(StdDraw.BOOK_BLUE);
-				StdDraw.filledRectangle(tgtCell.getPosX(), tgtCell.getPosY(), cellSize/1000, cellSize/1000);
+				StdDraw.setPenColor(burntOrange);
+				StdDraw.filledRectangle(tgtCell.getPosX(), tgtCell.getPosY(), tgtCell.getCellSize(), tgtCell.getCellSize());
 			} else {
 				if(tgtCell.isBomb()) {
 					flaggedBombs++;
@@ -138,7 +142,7 @@ public class Board {
 				tgtCell.setFlagged(true);
 				
 				StdDraw.setPenColor(StdDraw.RED);
-				StdDraw.filledRectangle(tgtCell.getPosX(), tgtCell.getPosY(), cellSize/1000, cellSize/1000);
+				StdDraw.filledRectangle(tgtCell.getPosX(), tgtCell.getPosY(), tgtCell.getCellSize(), tgtCell.getCellSize());
 			}
 		}
 	}
@@ -176,10 +180,10 @@ public class Board {
 		tgtCell.setRevealed(true);
 
 		StdDraw.setPenColor(StdDraw.WHITE);
-		StdDraw.filledRectangle(tgtCell.getPosX(), tgtCell.getPosY(), cellSize/1000, cellSize/1000);
+		StdDraw.filledRectangle(tgtCell.getPosX(), tgtCell.getPosY(), tgtCell.getCellSize(), tgtCell.getCellSize());
 
-		StdDraw.setPenColor(StdDraw.BOOK_BLUE);
-		StdDraw.rectangle(tgtCell.getPosX(), tgtCell.getPosY(), cellSize/1000, cellSize/1000);
+		StdDraw.setPenColor(burntOrange);
+		StdDraw.rectangle(tgtCell.getPosX(), tgtCell.getPosY(), tgtCell.getCellSize(), tgtCell.getCellSize());
 		StdDraw.text(tgtCell.getPosX(), tgtCell.getPosY(), getCellValue(tgtCell.getRow(), tgtCell.getColumn()));
 
 	}
@@ -197,27 +201,35 @@ public class Board {
 	}
 
 	public void drawBoard() {
-		StdDraw.setCanvasSize(rows * 55, columns * 55);
-		StdDraw.setPenColor(StdDraw.BOOK_BLUE);
+		double bufferSize = 10;
+		double totalX = rows * (bufferSize + cellSize);
+		double totalY = columns * (bufferSize + cellSize);
+		StdDraw.setCanvasSize((int) totalX,(int) totalY);
+		StdDraw.setPenColor(burntOrange);
 		//StdDraw.filledCircle(.5, .5, .1);
 
 
 		//double posX = 1.0/columns;
 		//double posY =  1 - (1.0/rows);
-		double posX = .05;
-		double posY = .95;
+		double marginPercent = .05;
+		double bufferSizePercent = (bufferSize / totalX)*.9;
+		double cellSizePercent = (cellSize / totalX)*.9;
+		cell[0][0].setCellSize(cellSizePercent / 2);
+		double posX = ((cellSizePercent + (bufferSizePercent / 2)/2));
+		double posY = 1 - (marginPercent * 2);
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < columns; c++) {
-				StdDraw.filledRectangle(posX, posY, cellSize/1000, cellSize/1000);
+				//System.out.println("PosX: " + posX + " PosY: " + posY + " cellSize: " + cellSizePercent + " bufferSize: " + bufferSizePercent);
+				StdDraw.filledRectangle(posX, posY, cellSizePercent / 2, cellSizePercent / 2);
 				//StdDraw.rectangle(posX, posY, cellSize/1000, cellSize/1000);
 				//StdDraw.text(posX, posY, getCellValue(r, c));
 				cell[r][c].setPosX(posX);
 				cell[r][c].setPosY(posY);
-				posX = (.05 + (c + 1.0)/columns);
+				posX += ((bufferSizePercent + cellSizePercent));
 			}
 
-			posX = .05;
-			posY = (.95 - ((r + 1.0)/rows));
+			posX = ((cellSizePercent + (bufferSizePercent / 2)/2));
+			posY -= ((bufferSizePercent + cellSizePercent));
 		}
 	}
 }
