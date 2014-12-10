@@ -1,7 +1,7 @@
 
 public class Cell {
 	private final static int BOMB = -1;
-	private static double cellSizePercentage;
+	private static double cellSize; //in percentage
 	
 	private boolean reveal;
 	private int value; // -1 is bomb, then the rest is the amount of neighbors
@@ -19,9 +19,9 @@ public class Cell {
 		
 	}
 	
-	public double getCellSize() { return cellSizePercentage; }
+	public double getCellSize() { return cellSize; }
 	
-	public void setCellSize(double cellSizePercentage) { Cell.cellSizePercentage = cellSizePercentage; }
+	public void setCellSize(double cellSize) { Cell.cellSize = cellSize; }
 
 	public boolean isRevealed() {
 		return reveal;
