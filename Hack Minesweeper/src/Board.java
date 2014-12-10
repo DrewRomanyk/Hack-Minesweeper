@@ -5,7 +5,7 @@ public class Board {
 	public final static int PLAYING = 0;
 	public final static int DEFEAT = 1;
 	public final static int VICTORY = 2;
-	
+
 	public final static Color BURNT_ORANGE = new Color(191,87,0);
 
 	public final static double CELL_SIZE = 45;
@@ -32,14 +32,14 @@ public class Board {
 		createBombs(probOfBomb);
 		drawBoard();
 	}
-	
+
 	public void createBombs(double probOfBomb) {
 		cell = new Cell[rows][columns];
-		
+
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < columns; c++) {
 				cell[r][c] = new Cell(probOfBomb, r, c);
-				
+
 				if(cell[r][c].isBomb()) {
 					bombsInGame++;
 				}
@@ -62,7 +62,7 @@ public class Board {
 			tgtCell.setValue(neighborringBombs);
 		}
 	}
-	
+
 	public void setAllNeighborValues() {
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < columns; c++) {
@@ -104,7 +104,7 @@ public class Board {
 
 	public Cell findClickedCell(double mouseX, double mouseY) {
 		Cell clickedCell = null;
-		
+
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < columns; c++) {
 				if(isClickedCell(mouseX, mouseY, cell[r][c])) {
@@ -120,17 +120,17 @@ public class Board {
 		return ((mouseX >= (tgtCell.getPosX() - (tgtCell.getCellSize()))) && (mouseX <= (tgtCell.getPosX() + (tgtCell.getCellSize()))) &&
 				(mouseY >= (tgtCell.getPosY() - (tgtCell.getCellSize()))) && (mouseY <= (tgtCell.getPosY() + (tgtCell.getCellSize()))));
 	}
-	
+
 	public int updateGameStatus(int gameStatus) {
 
 		if(flaggedBombs == bombsInGame && cellsInGame == (flaggedBombs + revealedCells)) {
 			System.out.println("BITCHES!!!");
 			gameStatus = VICTORY;
 		}
-		
+
 		return gameStatus;
 	}
-	
+
 	public void flagCell(Cell tgtCell) {
 		if(!tgtCell.isRevealed()) {
 			updateColorAndBombCount(tgtCell);
@@ -138,15 +138,15 @@ public class Board {
 			StdDraw.filledRectangle(tgtCell.getPosX(), tgtCell.getPosY(), tgtCell.getCellSize(), tgtCell.getCellSize());
 		}
 	}
-	
+
 	public void updateColorAndBombCount(Cell tgtCell) {
 		if(tgtCell.isFlagged()) {
 			if(tgtCell.isBomb()) { flaggedBombs--; }
-			
+
 			StdDraw.setPenColor(BURNT_ORANGE);
 		} else {
 			if(tgtCell.isBomb()) { flaggedBombs++; }
-			
+
 			StdDraw.setPenColor(StdDraw.RED);
 		}
 	}
@@ -154,7 +154,7 @@ public class Board {
 	public void revealCell(Cell tgtCell) {
 		if((!tgtCell.isBomb() && !tgtCell.isRevealed() && !tgtCell.isFlagged() && !firstRound) || (firstRound)) {
 			firstRoundPlay(tgtCell);
-			
+
 			updateRevealedCell(tgtCell);
 			revealedCells++;
 
@@ -165,20 +165,20 @@ public class Board {
 			gameStatus = DEFEAT;
 		}
 	}
-	
+
 	public void firstRoundPlay(Cell tgtCell) {
 		if(firstRound) {
 			firstRound = false;
 			setCellNotAsBomb(tgtCell);
-			
+
 			setAllNeighborValues();
 		}
 	}
-	
+
 	public void setCellNotAsBomb(Cell tgtCell) {
 		tgtCell.setValue(0);
 	}
-	
+
 	public void revealNeighborCells(Cell tgtCell) {
 		for(int r = tgtCell.getRow() - 1; r <= tgtCell.getRow() + 1; r++) {
 			for(int c = tgtCell.getColumn() - 1; c <= tgtCell.getColumn() + 1; c++) {
@@ -220,19 +220,19 @@ public class Board {
 		double cellSizePercent = (CELL_SIZE / totalX);
 		double posX = ((cellSizePercent + (bufferSizePercent / 2)/2)) - MARGIN_PERCENT;
 		double posY = 1 - (MARGIN_PERCENT);
-		
+
 		//set Canvas up
 		StdDraw.setCanvasSize((int) totalX,(int) totalY);
 		StdDraw.setPenColor(BURNT_ORANGE);
-		
+
 		cell[0][0].setCellSize(cellSizePercent / 2);
-		
+
 		for(int r = 0; r < rows; r++) {
 			for(int c = 0; c < columns; c++) {
 				StdDraw.filledRectangle(posX, posY, cellSizePercent / 2, cellSizePercent / 2);
 				cell[r][c].setPosX(posX);
 				cell[r][c].setPosY(posY);
-				
+
 				posX += ((bufferSizePercent + cellSizePercent));
 			}
 			posX = ((cellSizePercent + (bufferSizePercent / 2)/2)) - MARGIN_PERCENT;
